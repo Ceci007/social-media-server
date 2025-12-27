@@ -138,3 +138,23 @@ export const followUser = async (req, res) => {
     res.json({ success: false, message: error.message });
   }
 }
+
+export const unfollowUser = async (req, res) => {
+  try {
+    const { userId } = req.auth();
+    const { id } = req.body;
+
+    const user = await User.findById(userId);
+    user.following = user.following.filter(user => user !== id);
+    await user.save();
+
+    const toUser = await User.findById(id);
+    toUser.followers = toUser.followers.filter(user => user !== userId);
+    await toUser.save();
+
+    res.json({ success: true, message: "You are no longer following this user" });
+  } catch(error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+}
