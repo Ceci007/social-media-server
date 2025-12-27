@@ -21,7 +21,7 @@ export const getUserData = async (req, res) => {
 export const updateUserData = async (req, res) => {
   try {
     const { userId } = req.auth();
-    const {username, bio, location, full_name} = req.body;
+    let {username, bio, location, full_name} = req.body;
 
     const tempUser = await User.findById(userId);
 
@@ -49,7 +49,7 @@ export const updateUserData = async (req, res) => {
       const buffer = fs.readFileSync(profile.path);
       const response = await imageKit.upload({
         file: buffer,
-        fileName: profile.originalName
+        fileName: profile.originalname
       });
 
       const url = imageKit.url({
@@ -68,7 +68,7 @@ export const updateUserData = async (req, res) => {
       const buffer = fs.readFileSync(cover.path);
       const response = await imageKit.upload({
         file: buffer,
-        fileName: cover.originalName
+        fileName: cover.originalname
       });
 
       const url = imageKit.url({
